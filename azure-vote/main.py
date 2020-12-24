@@ -7,6 +7,7 @@ import sys
 import logging
 from datetime import datetime
 
+
 # App Insights
 # TODO: Import required libraries for App Insights
 from opencensus.ext.azure.log_exporter import AzureLogHandler
@@ -21,26 +22,33 @@ from opencensus.trace.samplers import ProbabilitySampler
 from opencensus.trace.tracer import Tracer
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 
-# Logging
 #logger = # TODO: Setup logger
 logger = logging.getLogger(__name__)
 logger.addHandler(AzureLogHandler(connection_string='InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86'))
 
 # Metrics
 #exporter = # TODO: Setup exporter
-exporter = metrics_exporter.new_metrics_exporter(enable_standard_metrics=True,connection_string='InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86')
+exporter = metrics_exporter.new_metrics_exporter(
+  enable_standard_metrics=True,
+  connection_string='InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86')
 
 # Tracing
 #tracer = # TODO: Setup tracer
-tracer = Tracer(exporter=AzureExporter(connection_string='InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86'), sampler=ProbabilitySampler(1.0),)
+tracer = Tracer(
+    exporter=AzureExporter(
+        connection_string='InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86'),
+    sampler=ProbabilitySampler(1.0),
+)
 
 app = Flask(__name__)
 
 # Requests
 #middleware = # TODO: Setup flask middleware
-middleware = FlaskMiddleware(app,exporter=AzureExporter(connection_string="InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86"),sampler=ProbabilitySampler(rate=1.0),)      
-
-
+middleware = FlaskMiddleware(
+    app,
+    exporter=AzureExporter(connection_string="InstrumentationKey=d1c291be-3bd7-4d5c-9eaa-618310979e86"),
+    sampler=ProbabilitySampler(rate=1.0),
+)
 # Load configurations from environment or config file
 app.config.from_pyfile('config_file.cfg')
 
@@ -83,13 +91,13 @@ def index():
         # TODO: use tracer object to trace dog vote
         tracer.span(name="Dogs")
 
+
         # Return index with values
         return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
 
     elif request.method == 'POST':
 
         if request.form['vote'] == 'reset':
-
             # Empty table and return results
             r.set(button1,0)
             r.set(button2,0)
@@ -122,4 +130,4 @@ if __name__ == "__main__":
     # comment line below when deploying to VMSS
     #app.run() # local
     # uncomment the line below before deployment to VMSS
-    app.run(host='0.0.0.0', threaded=True, debug=True) # remote
+    app.run(host='0.0.0.0', threaded=True, debug=True)
