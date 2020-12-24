@@ -4,7 +4,7 @@
 resourceGroup="acdnd-c4-project"
 location="westus2"
 osType="UbuntuLTS"
-vmssName="udacity-vmss"
+vmssName="udacity-vmss1"
 adminName="udacityadmin"
 storageAccount="udacitydiag$RANDOM"
 bePoolName="$vmssName-bepool"
@@ -14,7 +14,7 @@ nsgName="$vmssName-nsg"
 vnetName="$vmssName-vnet"
 subnetName="$vnetName-subnet"
 probeName="tcpProbe"
-vmSize="Standard_B1ls"
+vmSize="Standard_B2ms"
 storageType="Standard_LRS"
 
 # Create resource group
